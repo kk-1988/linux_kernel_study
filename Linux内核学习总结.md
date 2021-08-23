@@ -1,7 +1,7 @@
 #### 环境搭建
 1. 源码下载
     * 地址1(2.6版本)：git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6.git
-    * 
+    * 地址2(4.9.120版本)：
 
 2. 内核源码树
     * 基于2.6版本
@@ -56,6 +56,8 @@
 4. 打包文件系统
 
 5. 使用qemu进行启动
+    * 命令如下：
+        
 
 #### 进程
 1.   
