@@ -51,13 +51,25 @@
         3. 通过make menuconfig配置自己设备的实际选项
         4. 
     * 减少编译的垃圾信息
-    * 安装新内核
 
 4. 打包文件系统
+    * Linux 简说
+    * 
 
-5. 使用qemu进行启动
-    * 命令如下：
-        
+5. 使用qemu进行启动(qemu)
+    * Linux 简说=>
+    qemu-system-x86_64 -kernel ./linux-4.9.229/arch/x86/boot/bzImage -initrd ./busybox-1.33.1/rootfs.img.gz --append "root=/dev/ram init=/linuxrc" -serial file:output.txt
+    * 奔跑吧Linux=>
+
+
+#### 内核空间与用户空间
+* 基本概念
+1. 
+* x86段页式内存管理体系
+1. 
+2. 
+* arm内存管理体系
+1. 
 
 #### 进程
 1.   
