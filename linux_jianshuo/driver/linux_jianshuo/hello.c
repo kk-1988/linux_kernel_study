@@ -17,25 +17,46 @@ dev_t devNum;
 unsigned int subDevNum = 1;
 int reg_major = 232;
 int reg_minor = 0;
-
-char *buffer;
-int flag = 0;
+char buffer[BUFFER_MAX];
+struct semaphore sema;
+int open_count = 0;
 
 int hello_open(struct inode *p, struct file *f)
 {
+    down(&sema);
+    if(open_count >= 1)
+    {
+        up(&sema);
+        printk(KERN_INFO"device is busy\r\n");
+        return -EBUSY;
+    }
+    open_count++;
+    up(&sema);
+
     printk(KERN_EMERG"hello_open\r\n");
-    retrun 0;
+    return 0;
+}
+
+int hello_close(struct inode *inode, struct file *filp)
+{
+    if(open_count != 1)
+    {
+        printk(KERN_INFO"something wrong,hello close is failed\r\n");
+        return -EFAULT;
+    }
+    
+    open_count--;
 }
 
 ssize_t hello_write(struct file *f, const char __user *u,  size_t s, loff_t *l)
 {
     printk(KERN_EMERG"hello_write\r\n");
-    retrun 0;
+    return 0;
 }
 
 ssize_t hello_read(struct file *f, char __user *u, size_t s, loff_t *l)
 {
-    printf(KERN_EMERG"hello_read\r\n");
+    printk(KERN_EMERG"hello_read\r\n");
     return 0;
 }
 
@@ -58,8 +79,11 @@ int hello_init(void)
     gFile->read = hello_read;
     gFile->write = hello_write;
     gFile->owner = THIS_MODULE;
-    cdev_init(gDev, gFIle);
+    cdev_init(gDev, gFile);
     cdev_add(gDev, devNum, 3);
+
+
+    sema_init(&sema, 1);
     return 0;
 }
 
