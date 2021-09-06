@@ -80,7 +80,7 @@ int hello_init(void)
     gFile->open = hello_open;
     gFile->read = hello_read;
     gFile->write = hello_write;
-    gFIle->close = hello_close;
+    gFile->release  = hello_close;
     gFile->owner = THIS_MODULE;
     cdev_init(gDev, gFile);
     cdev_add(gDev, devNum, 3);
