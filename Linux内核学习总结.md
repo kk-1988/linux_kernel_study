@@ -108,7 +108,11 @@
         2. 
         3. 
         4. 
-3. 
+3. 使用方法
+    * 定义 atomic_t xxx = ATOMIC_INIT(1);
+    * 调用 
+    + atomic_dec_and_test(&xxx) 减1测试
+    + 
 
 * Linux内核锁机制介绍
 1. 自旋锁(spin_lock)
