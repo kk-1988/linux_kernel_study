@@ -44,8 +44,10 @@ int hello_close(struct inode *inode, struct file *filp)
         printk(KERN_INFO"something wrong,hello close is failed\r\n");
         return -EFAULT;
     }
-    
+
     open_count--;
+
+    return 0;
 }
 
 ssize_t hello_write(struct file *f, const char __user *u,  size_t s, loff_t *l)
@@ -78,6 +80,7 @@ int hello_init(void)
     gFile->open = hello_open;
     gFile->read = hello_read;
     gFile->write = hello_write;
+    gFIle->close = hello_close;
     gFile->owner = THIS_MODULE;
     cdev_init(gDev, gFile);
     cdev_add(gDev, devNum, 3);
