@@ -54,7 +54,6 @@ int hello_init(void)
     printk(KERN_EMERG"hello driver init \n");
     gDev = kzalloc(sizeof(struct cdev), GFP_KERNEL);
     gFile = kzalloc(sizeof(struct file_operations), GFP_KERNEL);
-    gDev = kzalloc(sizeof(struct cdev), GFP_KERNEL);
     gFile->open = hello_open;
     gFile->read = hello_read;
     gFile->write = hello_write;
