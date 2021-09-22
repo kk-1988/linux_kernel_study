@@ -18,20 +18,24 @@ unsigned int subDevNum = 1;
 int reg_major = 232;
 int reg_minor = 0;
 char buffer[BUFFER_MAX];
-struct semaphore sema;
+spinlock_t count_lock;
 int open_count = 0;
 
 int hello_open(struct inode *p, struct file *f)
 {
-    down(&sema);
+    //down(&sema);
+    spin_lock(&count_lock);
+    //临界段的代码必须要少，且不能调用会引起睡眠的函数
     if(open_count >= 1)
     {
-        up(&sema);
+        //up(&sema);
+        spin_unlock(&count_lock);
         printk(KERN_INFO"device is busy\r\n");
         return -EBUSY;
     }
     open_count++;
-    up(&sema);
+    //up(&sema);
+    spin_unlock(&count_lock);
 
     printk(KERN_EMERG"hello_open\r\n");
     return 0;
@@ -85,8 +89,8 @@ int hello_init(void)
     cdev_init(gDev, gFile);
     cdev_add(gDev, devNum, 3);
 
-
-    sema_init(&sema, 1);
+    //sema_init(&sema, 1);
+    spin_lock_init(&count_lock);
     return 0;
 }
 
