@@ -26,8 +26,22 @@
 > 相关原理截图：    
 多cpu：  
 ![多cpu访问原理](./多cpu_spin_lock.png)  
+
 单cpu：  
-![单cpu访问原理](./单cpu_spin_lock.png)
+![单cpu访问原理](./单cpu_spin_lock.png)  
+
+> 相关接口  
+1. spin_lock 进程与进程之间的同步(和信号量一样)
+2. spin_lock_bh 涉及到与本地软中断之间的同步
+3. spin_lock_irq 涉及到与本地硬件中断之间的同步
+4. spin_lock_irqsave 涉及到与本地硬件中断之间的同步并保存本地中断状态
+5. spin_trylock 尝试获取锁，如果成功返回非零值，否则返回零  
+
+> UP和SMP的区别 
+
+> spin_lock的公平性  
+
+
 
 <br />
 
