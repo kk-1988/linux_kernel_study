@@ -1,5 +1,13 @@
 ## 概念
-* 原子操作
+* 原子操作 atomic  
+> 概念  
+atomic,
+
+> 内联汇编  
+
+> 
+
+> 
 * 信号量 
 > 概念:  
 1. 用于资源同步
@@ -49,6 +57,34 @@
 1. 
 2. 
 3. 
+
+> spinlock smp源码解读  
+
+static inline void arch_spin_lock(arch_spinlock_t *lock)
+{
+	unsigned long tmp;
+	u32 newval;
+	arch_spinlock_t lockval;
+
+    /* 关闭抢占 */
+	prefetchw(&lock->slock);
+	__asm__ __volatile__(
+"1:	ldrex	%0, [%3]\n"
+"	add	%1, %0, %4\n"
+"	strex	%2, %1, [%3]\n"
+"	teq	%2, #0\n"
+"	bne	1b"
+	: "=&r" (lockval), "=&r" (newval), "=&r" (tmp)
+	: "r" (&lock->slock), "I" (1 << TICKET_SHIFT)
+	: "cc");
+
+	while (lockval.tickets.next != lockval.tickets.owner) {
+		wfe();
+		lockval.tickets.owner = ACCESS_ONCE(lock->tickets.owner);
+	}
+
+	smp_mb();
+}
 
 <br />
 
