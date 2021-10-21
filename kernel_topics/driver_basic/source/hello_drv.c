@@ -15,14 +15,34 @@
 #include <linux/kmod.h>
 #include <linux/gfp.h>
 
-/* 确定主设备号，为0表示让内核自动分配*/
 static int major = 0;
 
-/* 分配定义个file_operations 结构体 */
+static ssize_t hello_drv_read(struct file *file, char __user *buf, size_t size, loff_t *offset)
+{
+	printk("hello_drv_read...\r\n");
+}
+
+static ssize_t hello_drv_write(struct file *file, char __user *buf, size_t size, loff_t *offset)
+{
+	printk("hello_drv_write...\r\n");
+}
+
+static int hello_drv_open(struct inode *node, struct file *file)
+{
+	printk("hello_drv_open...\r\n");
+}
+
+static int hello_drv_close(sturct inode *node, struct file *file)
+{
+	printk("hello_drv_close...\r\n");
+}
+
 static struct file_operations hello_drv = {
-	
+	.owner = THIS_MODULE,
+	.open = hello_drv_open,
+	.read = hello_drv_read,
+	.write = hello_drv_write,
+	.release = hello_drv_close,
 };
 
-/* 实现对应的open/read/write等函数,填入file_operations 结构体*/
-
-/* */
+//
